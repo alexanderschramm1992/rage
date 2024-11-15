@@ -1,0 +1,30 @@
+{
+  "name": "rage",
+  "version": "1.0.0",
+  "description": "character sheet creation for rage",
+  "main": "index.html",
+  "watch": {
+    "compile": "src/*.elm"
+  },
+  "scripts": {
+    "compile": "elm make src/Main.elm --optimize --output=build/elm.js",
+    "watch": "npm-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexanderschramm1992/rage.git"
+  },
+  "keywords": [
+    "rage",
+    "elm"
+  ],
+  "author": "Alexander Schramm",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/alexanderschramm1992/rage/issues"
+  },
+  "homepage": "https://github.com/alexanderschramm1992/rage#readme",
+  "dependencies": {
+    "npm-watch": "^0.13.0"
+  }
+}
