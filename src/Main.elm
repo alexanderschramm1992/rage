@@ -28,6 +28,8 @@ main =
 
 type alias Model =
   { name : String
+  , alter: Maybe Int
+  , lebenspunkte: Int
   , beruf : Beruf
   , stärke : Würfel
   , geschick : Würfel
@@ -42,6 +44,11 @@ feuerwehrmann : Beruf
 feuerwehrmann =
     { name = "Feuerwehrmann"
     , gegenstand = "Axt" }
+
+sanitäter : Beruf
+sanitäter =
+    { name = "Sanitäter"
+    , gegenstand = "Erste Hilfe Set" }
 
 obdachloser : Beruf
 obdachloser =
@@ -64,6 +71,8 @@ init flags =
       Ok model -> model
       Err _ ->
         { name = ""
+        , alter = Nothing
+        , lebenspunkte = 2
         , beruf = obdachloser
         , stärke = D8
         , geschick = D8
@@ -79,11 +88,23 @@ init flags =
 type Msg
   = NameGeändert String
   | BerufGeändert Beruf
+  | AlterGeändert (Maybe Int)
+  | LebenspunkteGeändert Int
 
 zuBerufGeändert : String -> Msg
 zuBerufGeändert beruf = BerufGeändert ( case beruf of
     "Feuerwehrmann" -> feuerwehrmann
+    "Sanitäter" -> sanitäter
     _ -> obdachloser )
+
+zuAlterGeändert : String -> Msg
+zuAlterGeändert alter = AlterGeändert (String.toInt alter)
+
+zuLebenspunkteGeändert : String -> Msg
+zuLebenspunkteGeändert lebenspunkte = lebenspunkte
+    |> String.toInt
+    |> Maybe.withDefault 2
+    |> LebenspunkteGeändert
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -96,6 +117,14 @@ update msg model =
       ( { model | beruf = beruf }
       , Cmd.none )
 
+    AlterGeändert alter ->
+      ( { model | alter = alter }
+      , Cmd.none )
+
+    LebenspunkteGeändert lebenspunkte ->
+      ( { model | lebenspunkte = lebenspunkte }
+      , Cmd.none )
+
 
 
 -- VIEW
@@ -103,19 +132,57 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div []
-    [ input
-        [ type_ "text"
-        , placeholder "Name"
-        , onInput NameGeändert
-        , value model.name ]
-        []
-    , select
-        [ placeholder "Beruf"
-        , onInput zuBerufGeändert
-        , value model.beruf.name ]
-        [ option [ value "Feuerwehrmann" ] [ text "Feuerwehrmann" ] ]
-    ]
+  article [ class "main card" ]
+    [ div []
+        [ div [ class "flex two" ]
+            [ div []
+                [ label [ for "name-input" ]
+                    [ text "Name" ]
+                , input
+                    [ id "name-input"
+                    , type_ "text"
+                    , placeholder "Name"
+                    , onInput NameGeändert
+                    , value model.name ]
+                    [] ]
+            , div []
+                [ label [ for "beruf-input" ]
+                    [ text "Beruf" ]
+                , select
+                    [ id "beruf-input"
+                    , placeholder "Beruf"
+                    , onInput zuBerufGeändert
+                    , value model.beruf.name ]
+                    [ option [ value "Feuerwehrmann" ] [ text "Feuerwehrmann" ]
+                    , option [ value "Sanitäter" ] [ text "Sanitäter" ]
+                    , option [ value "Obdachloser" ] [ text "Obdachloser" ] ] ] ]
+        , div [ class "flex two" ]
+            [ div []
+                [ label [ for "alter-input" ]
+                    [ text "Alter" ]
+                , input
+                    [ id "alter-input"
+                    , type_ "number"
+                    , placeholder "Alter"
+                    , onInput zuAlterGeändert
+                    , model.alter
+                        |> Maybe.withDefault 25
+                        |> String.fromInt
+                        |> value ]
+                    [] ]
+            , div []
+                [ label [ for "lebenspunkte-input" ]
+                    [ text "Lebenspunkte" ]
+                , input
+                    [ type_ "number"
+                    , placeholder "Lebenspunkte"
+                    , onInput zuLebenspunkteGeändert
+                    , Html.Attributes.min "0"
+                    , Html.Attributes.max "3"
+                    , model.lebenspunkte
+                        |> String.fromInt
+                        |> value ]
+                    [] ] ] ] ]
 
 
 
@@ -148,8 +215,13 @@ encode : Model -> E.Value
 encode model =
   E.object
     [ ("name", E.string model.name)
+    , ("alter", E.int (Maybe.withDefault 30 model.alter))
+    , ("lebenspunkte", E.int model.lebenspunkte)
     , ("beruf", encodeBeruf model.beruf)
-    , ("stärke", encodeWürfel model.stärke) ]
+    , ("stärke", encodeWürfel model.stärke)
+    , ("geschick", encodeWürfel model.geschick)
+    , ("weisheit", encodeWürfel model.weisheit)
+    , ("mut", encodeWürfel model.mut)]
 
 encodeBeruf : Beruf -> E.Value
 encodeBeruf beruf = E.object
@@ -169,8 +241,10 @@ encodeWürfel würfel = case würfel of
 
 decoder : D.Decoder Model
 decoder =
-  D.map6 Model
+  D.map8 Model
     (D.field "name" D.string)
+    (D.field "alter" (D.maybe D.int))
+    (D.field "lebenspunkte" D.int)
     (D.field "beruf" decodeBeruf)
     (D.field "stärke" decodeWürfel)
     (D.field "geschick" decodeWürfel)

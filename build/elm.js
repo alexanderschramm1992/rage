@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.L.B === region.R.B)
+	if (region.P.E === region.W.E)
 	{
-		return 'on line ' + region.L.B;
+		return 'on line ' + region.P.E;
 	}
-	return 'on lines ' + region.L.B + ' through ' + region.R.B;
+	return 'on lines ' + region.P.E + ' through ' + region.W.E;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
+		impl.aC,
+		impl.aJ,
 		impl.aH,
-		impl.aF,
 		function() { return function() {} }
 	);
 });
@@ -2720,8 +2720,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		p: func(record.p),
-		M: record.M,
-		J: record.J
+		Q: record.Q,
+		N: record.N
 	}
 });
 
@@ -2990,10 +2990,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.p;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.M;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Q;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.J) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.N) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
+		impl.aC,
+		impl.aJ,
 		impl.aH,
-		impl.aF,
 		function(sendToApp, initialModel) {
-			var view = impl.aI;
+			var view = impl.aK;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
+		impl.aC,
+		impl.aJ,
 		impl.aH,
-		impl.aF,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.K && impl.K(sendToApp)
-			var view = impl.aI;
+			var divertHrefToApp = impl.O && impl.O(sendToApp)
+			var view = impl.aK;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.av);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aG) && (_VirtualDom_doc.title = title = doc.aG);
+				(title !== doc.aI) && (_VirtualDom_doc.title = title = doc.aI);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aB;
-	var onUrlRequest = impl.aC;
+	var onUrlChange = impl.aD;
+	var onUrlRequest = impl.aE;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		K: function(sendToApp)
+		O: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.af === next.af
-							&& curr.W === next.W
-							&& curr.ac.a === next.ac.a
+							&& curr.ai === next.ai
+							&& curr._ === next._
+							&& curr.af.a === next.af.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aA: function(flags)
+		aC: function(flags)
 		{
-			return A3(impl.aA, flags, _Browser_getUrl(), key);
+			return A3(impl.aC, flags, _Browser_getUrl(), key);
 		},
-		aI: impl.aI,
-		aH: impl.aH,
-		aF: impl.aF
+		aK: impl.aK,
+		aJ: impl.aJ,
+		aH: impl.aH
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ay: 'hidden', au: 'visibilitychange' }
+		? { aA: 'hidden', aw: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ay: 'mozHidden', au: 'mozvisibilitychange' }
+		? { aA: 'mozHidden', aw: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ay: 'msHidden', au: 'msvisibilitychange' }
+		? { aA: 'msHidden', aw: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ay: 'webkitHidden', au: 'webkitvisibilitychange' }
-		: { ay: 'hidden', au: 'visibilitychange' };
+		? { aA: 'webkitHidden', aw: 'webkitvisibilitychange' }
+		: { aA: 'hidden', aw: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aj: _Browser_getScene(),
-		am: {
-			ap: _Browser_window.pageXOffset,
-			aq: _Browser_window.pageYOffset,
-			ao: _Browser_doc.documentElement.clientWidth,
-			V: _Browser_doc.documentElement.clientHeight
+		am: _Browser_getScene(),
+		ap: {
+			ar: _Browser_window.pageXOffset,
+			as: _Browser_window.pageYOffset,
+			aq: _Browser_doc.documentElement.clientWidth,
+			Z: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		ao: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		V: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aq: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		Z: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aj: {
-				ao: node.scrollWidth,
-				V: node.scrollHeight
-			},
 			am: {
-				ap: node.scrollLeft,
-				aq: node.scrollTop,
-				ao: node.clientWidth,
-				V: node.clientHeight
+				aq: node.scrollWidth,
+				Z: node.scrollHeight
+			},
+			ap: {
+				ar: node.scrollLeft,
+				as: node.scrollTop,
+				aq: node.clientWidth,
+				Z: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aj: _Browser_getScene(),
-			am: {
-				ap: x,
-				aq: y,
-				ao: _Browser_doc.documentElement.clientWidth,
-				V: _Browser_doc.documentElement.clientHeight
+			am: _Browser_getScene(),
+			ap: {
+				ar: x,
+				as: y,
+				aq: _Browser_doc.documentElement.clientWidth,
+				Z: _Browser_doc.documentElement.clientHeight
 			},
-			aw: {
-				ap: x + rect.left,
-				aq: y + rect.top,
-				ao: rect.width,
-				V: rect.height
+			ay: {
+				ar: x + rect.left,
+				as: y + rect.top,
+				aq: rect.width,
+				Z: rect.height
 			}
 		};
 	});
@@ -4874,7 +4874,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {T: fragment, W: host, aa: path, ac: port_, af: protocol, ag: query};
+		return {Y: fragment, _: host, ad: path, af: port_, ai: protocol, aj: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5155,13 +5155,13 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Main$D8 = 2;
 var $elm$json$Json$Decode$decodeValue = _Json_run;
-var $author$project$Main$Model = F6(
-	function (name, beruf, stärke, geschick, weisheit, mut) {
-		return {A: beruf, U: geschick, Z: mut, j: name, N: stärke, an: weisheit};
+var $author$project$Main$Model = F8(
+	function (name, alter, lebenspunkte, beruf, stärke, geschick, weisheit, mut) {
+		return {A: alter, B: beruf, J: geschick, D: lebenspunkte, L: mut, j: name, R: stärke, S: weisheit};
 	});
 var $author$project$Main$Beruf = F2(
 	function (name, gegenstand) {
-		return {G: gegenstand, j: name};
+		return {C: gegenstand, j: name};
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$string = _Json_decodeString;
@@ -5198,11 +5198,26 @@ var $author$project$Main$decodeWürfel = A2(
 		}
 	},
 	$elm$json$Json$Decode$string);
-var $elm$json$Json$Decode$map6 = _Json_map6;
-var $author$project$Main$decoder = A7(
-	$elm$json$Json$Decode$map6,
+var $elm$json$Json$Decode$int = _Json_decodeInt;
+var $elm$json$Json$Decode$map8 = _Json_map8;
+var $elm$json$Json$Decode$oneOf = _Json_oneOf;
+var $elm$json$Json$Decode$maybe = function (decoder) {
+	return $elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, decoder),
+				$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing)
+			]));
+};
+var $author$project$Main$decoder = A9(
+	$elm$json$Json$Decode$map8,
 	$author$project$Main$Model,
 	A2($elm$json$Json$Decode$field, 'name', $elm$json$Json$Decode$string),
+	A2(
+		$elm$json$Json$Decode$field,
+		'alter',
+		$elm$json$Json$Decode$maybe($elm$json$Json$Decode$int)),
+	A2($elm$json$Json$Decode$field, 'lebenspunkte', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'beruf', $author$project$Main$decodeBeruf),
 	A2($elm$json$Json$Decode$field, 'stärke', $author$project$Main$decodeWürfel),
 	A2($elm$json$Json$Decode$field, 'geschick', $author$project$Main$decodeWürfel),
@@ -5210,7 +5225,7 @@ var $author$project$Main$decoder = A7(
 	A2($elm$json$Json$Decode$field, 'mut', $author$project$Main$decodeWürfel));
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
-var $author$project$Main$obdachloser = {G: 'Glasflasche', j: 'Obdachloser'};
+var $author$project$Main$obdachloser = {C: 'Glasflasche', j: 'Obdachloser'};
 var $author$project$Main$init = function (flags) {
 	return _Utils_Tuple2(
 		function () {
@@ -5219,7 +5234,7 @@ var $author$project$Main$init = function (flags) {
 				var model = _v0.a;
 				return model;
 			} else {
-				return {A: $author$project$Main$obdachloser, U: 2, Z: 2, j: '', N: 2, an: 2};
+				return {A: $elm$core$Maybe$Nothing, B: $author$project$Main$obdachloser, J: 2, D: 2, L: 2, j: '', R: 2, S: 2};
 			}
 		}(),
 		$elm$core$Platform$Cmd$none);
@@ -5249,7 +5264,7 @@ var $author$project$Main$encodeBeruf = function (beruf) {
 				$elm$json$Json$Encode$string(beruf.j)),
 				_Utils_Tuple2(
 				'gegenstand',
-				$elm$json$Json$Encode$string(beruf.G))
+				$elm$json$Json$Encode$string(beruf.C))
 			]));
 };
 var $author$project$Main$encodeWürfel = function (würfel) {
@@ -5304,6 +5319,16 @@ var $author$project$Main$encodeWürfel = function (würfel) {
 					]));
 	}
 };
+var $elm$json$Json$Encode$int = _Json_wrap;
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$Main$encode = function (model) {
 	return $elm$json$Json$Encode$object(
 		_List_fromArray(
@@ -5312,30 +5337,61 @@ var $author$project$Main$encode = function (model) {
 				'name',
 				$elm$json$Json$Encode$string(model.j)),
 				_Utils_Tuple2(
+				'alter',
+				$elm$json$Json$Encode$int(
+					A2($elm$core$Maybe$withDefault, 30, model.A))),
+				_Utils_Tuple2(
+				'lebenspunkte',
+				$elm$json$Json$Encode$int(model.D)),
+				_Utils_Tuple2(
 				'beruf',
-				$author$project$Main$encodeBeruf(model.A)),
+				$author$project$Main$encodeBeruf(model.B)),
 				_Utils_Tuple2(
 				'stärke',
-				$author$project$Main$encodeWürfel(model.N))
+				$author$project$Main$encodeWürfel(model.R)),
+				_Utils_Tuple2(
+				'geschick',
+				$author$project$Main$encodeWürfel(model.J)),
+				_Utils_Tuple2(
+				'weisheit',
+				$author$project$Main$encodeWürfel(model.S)),
+				_Utils_Tuple2(
+				'mut',
+				$author$project$Main$encodeWürfel(model.L))
 			]));
 };
 var $author$project$Main$setStorage = _Platform_outgoingPort('setStorage', $elm$core$Basics$identity);
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (!msg.$) {
-			var name = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{j: name}),
-				$elm$core$Platform$Cmd$none);
-		} else {
-			var beruf = msg.a;
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{A: beruf}),
-				$elm$core$Platform$Cmd$none);
+		switch (msg.$) {
+			case 0:
+				var name = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{j: name}),
+					$elm$core$Platform$Cmd$none);
+			case 1:
+				var beruf = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{B: beruf}),
+					$elm$core$Platform$Cmd$none);
+			case 2:
+				var alter = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{A: alter}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var lebenspunkte = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{D: lebenspunkte}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$updateWithStorage = F2(
@@ -5357,8 +5413,22 @@ var $elm$json$Json$Decode$value = _Json_decodeValue;
 var $author$project$Main$NameGeändert = function (a) {
 	return {$: 0, a: a};
 };
+var $elm$html$Html$article = _VirtualDom_node('article');
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
+var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -5392,79 +5462,232 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
 };
 var $elm$html$Html$option = _VirtualDom_node('option');
-var $elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$string(string));
-	});
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $elm$html$Html$select = _VirtualDom_node('select');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Main$AlterGeändert = function (a) {
+	return {$: 2, a: a};
+};
+var $author$project$Main$zuAlterGeändert = function (alter) {
+	return $author$project$Main$AlterGeändert(
+		$elm$core$String$toInt(alter));
+};
 var $author$project$Main$BerufGeändert = function (a) {
 	return {$: 1, a: a};
 };
-var $author$project$Main$feuerwehrmann = {G: 'Axt', j: 'Feuerwehrmann'};
+var $author$project$Main$feuerwehrmann = {C: 'Axt', j: 'Feuerwehrmann'};
+var $author$project$Main$sanitäter = {C: 'Erste Hilfe Set', j: 'Sanitäter'};
 var $author$project$Main$zuBerufGeändert = function (beruf) {
 	return $author$project$Main$BerufGeändert(
 		function () {
-			if (beruf === 'Feuerwehrmann') {
-				return $author$project$Main$feuerwehrmann;
-			} else {
-				return $author$project$Main$obdachloser;
+			switch (beruf) {
+				case 'Feuerwehrmann':
+					return $author$project$Main$feuerwehrmann;
+				case 'Sanitäter':
+					return $author$project$Main$sanitäter;
+				default:
+					return $author$project$Main$obdachloser;
 			}
 		}());
 };
+var $author$project$Main$LebenspunkteGeändert = function (a) {
+	return {$: 3, a: a};
+};
+var $author$project$Main$zuLebenspunkteGeändert = function (lebenspunkte) {
+	return $author$project$Main$LebenspunkteGeändert(
+		A2(
+			$elm$core$Maybe$withDefault,
+			2,
+			$elm$core$String$toInt(lebenspunkte)));
+};
 var $author$project$Main$view = function (model) {
 	return A2(
-		$elm$html$Html$div,
-		_List_Nil,
+		$elm$html$Html$article,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('main card')
+			]),
 		_List_fromArray(
 			[
 				A2(
-				$elm$html$Html$input,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$type_('text'),
-						$elm$html$Html$Attributes$placeholder('Name'),
-						$elm$html$Html$Events$onInput($author$project$Main$NameGeändert),
-						$elm$html$Html$Attributes$value(model.j)
-					]),
-				_List_Nil),
-				A2(
-				$elm$html$Html$select,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$placeholder('Beruf'),
-						$elm$html$Html$Events$onInput($author$project$Main$zuBerufGeändert),
-						$elm$html$Html$Attributes$value(model.A.j)
-					]),
+				$elm$html$Html$div,
+				_List_Nil,
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$option,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$value('Feuerwehrmann')
+								$elm$html$Html$Attributes$class('flex two')
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('Feuerwehrmann')
+								A2(
+								$elm$html$Html$div,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$label,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$for('name-input')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Name')
+											])),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('name-input'),
+												$elm$html$Html$Attributes$type_('text'),
+												$elm$html$Html$Attributes$placeholder('Name'),
+												$elm$html$Html$Events$onInput($author$project$Main$NameGeändert),
+												$elm$html$Html$Attributes$value(model.j)
+											]),
+										_List_Nil)
+									])),
+								A2(
+								$elm$html$Html$div,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$label,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$for('beruf-input')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Beruf')
+											])),
+										A2(
+										$elm$html$Html$select,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('beruf-input'),
+												$elm$html$Html$Attributes$placeholder('Beruf'),
+												$elm$html$Html$Events$onInput($author$project$Main$zuBerufGeändert),
+												$elm$html$Html$Attributes$value(model.B.j)
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$option,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$value('Feuerwehrmann')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('Feuerwehrmann')
+													])),
+												A2(
+												$elm$html$Html$option,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$value('Sanitäter')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('Sanitäter')
+													])),
+												A2(
+												$elm$html$Html$option,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$value('Obdachloser')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('Obdachloser')
+													]))
+											]))
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('flex two')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$label,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$for('alter-input')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Alter')
+											])),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$id('alter-input'),
+												$elm$html$Html$Attributes$type_('number'),
+												$elm$html$Html$Attributes$placeholder('Alter'),
+												$elm$html$Html$Events$onInput($author$project$Main$zuAlterGeändert),
+												$elm$html$Html$Attributes$value(
+												$elm$core$String$fromInt(
+													A2($elm$core$Maybe$withDefault, 25, model.A)))
+											]),
+										_List_Nil)
+									])),
+								A2(
+								$elm$html$Html$div,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$label,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$for('lebenspunkte-input')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Lebenspunkte')
+											])),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$type_('number'),
+												$elm$html$Html$Attributes$placeholder('Lebenspunkte'),
+												$elm$html$Html$Events$onInput($author$project$Main$zuLebenspunkteGeändert),
+												$elm$html$Html$Attributes$min('0'),
+												$elm$html$Html$Attributes$max('3'),
+												$elm$html$Html$Attributes$value(
+												$elm$core$String$fromInt(model.D))
+											]),
+										_List_Nil)
+									]))
 							]))
 					]))
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{
-		aA: $author$project$Main$init,
-		aF: function (_v0) {
+		aC: $author$project$Main$init,
+		aH: function (_v0) {
 			return $elm$core$Platform$Sub$none;
 		},
-		aH: $author$project$Main$updateWithStorage,
-		aI: $author$project$Main$view
+		aJ: $author$project$Main$updateWithStorage,
+		aK: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main($elm$json$Json$Decode$value)(0)}});}(this));

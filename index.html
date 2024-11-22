@@ -1,28 +1,29 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>RAGE Character Bogen</title>
-    <script type="text/javascript" src="build/elm.js"></script>
-</head>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <title>RAGE Character Bogen</title>
+        <script type="text/javascript" src="build/elm.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+        <link rel="stylesheet" href="./index.css">
+    </head>
+    <body>
+        <div id="app"></div>
+        <script>
+            // Extract the stored data from previous sessions.
+            const storedData = localStorage.getItem('app-model');
+            const flags = storedData ? JSON.parse(storedData) : null;
 
-<body>
-<div id="app"></div>
-<script>
-    // Extract the stored data from previous sessions.
-    const storedData = localStorage.getItem('app-model');
-    const flags = storedData ? JSON.parse(storedData) : null;
+            // Load the Elm app, passing in the stored data.
+            const app = Elm.Main.init({
+                node: document.getElementById('app'),
+                flags: flags
+            });
 
-    // Load the Elm app, passing in the stored data.
-    const app = Elm.Main.init({
-        node: document.getElementById('app'),
-        flags: flags
-    });
-
-    // Listen for commands from the `setStorage` port.
-    // Turn the data to a string and put it in localStorage.
-    app.ports.setStorage.subscribe(function(state) {
-        localStorage.setItem('app-model', JSON.stringify(state));
-    });
-</script>
-</body>
+            // Listen for commands from the `setStorage` port.
+            // Turn the data to a string and put it in localStorage.
+            app.ports.setStorage.subscribe(function(state) {
+                localStorage.setItem('app-model', JSON.stringify(state));
+            });
+        </script>
+    </body>
 </html>
