@@ -6,3 +6,13 @@ article.main {
 .margin-1 {
     margin: 1em;
 }
+
+.bold {
+    font-weight: bold;
+}
+
+input[type=radio] {
+    opacity: revert !important;
+    width: 100% !important;
+    position: revert !important;
+}
